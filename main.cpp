@@ -1,21 +1,13 @@
 #include "mbed.h"
 #include "LCDi2c.h"
 
-#define CODE_LENGTH 100
-
 LCDi2c lcd(LCD20x4);
 
 char str[32];
-char correctCode[CODE_LENGTH] = {'1', '3', '5', '9'};
-char enterCode[CODE_LENGTH];
-int enterDigits = 0;
-int eventsIndex = 0;
 
 AnalogIn potentiometer(A0);
 AnalogIn lm35(A1);
 AnalogIn mq2(A3);
-DigitalOut alarmLed(LED1);
-DigitalOut incorrectCodeLed(LED3);
 PwmOut buzzer(D9);
 UnbufferedSerial uartUsb(USBTX, USBRX, 115200);
 
@@ -43,13 +35,6 @@ char matrixKeypadIndexToCharArray[] = {
     '*', '0', '#', 'D'
 };
 
-typedef struct systemEvent {
-    time_t seconds;
-    char typeOfEvent[14];
-} systemEvent_t;
-
-systemEvent_t arrayOfStoredEvents[100];
-
 void inputsInit() {
     for(int i = 0; i < 4; i++) {
         keypadCol[i].mode(PullUp);
@@ -57,8 +42,6 @@ void inputsInit() {
 }
 
 void outputsInit() {
-    alarmLed = 0;
-    incorrectCodeLed = 0;
     buzzer = 0;
 }
 
