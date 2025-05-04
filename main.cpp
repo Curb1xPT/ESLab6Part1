@@ -204,31 +204,6 @@ void availableCommands()
     uartUsb.write("Press '3' on the keypad to display state of temp. detector\r\n\r\n", 63);
 }
 
-void systemStateUpdate(bool lastState, bool currentState, const char* elementName) {
-    char eventAndStateStr[14] = "";
-
-    if (lastState != currentState) {
-
-        strcat(eventAndStateStr, elementName);
-        if (currentState) {
-            strcat(eventAndStateStr, "_ON");
-        } else {
-            strcat(eventAndStateStr, "_OFF");
-        }
-
-        arrayOfStoredEvents[eventsIndex].seconds = time(NULL);
-        strcpy(arrayOfStoredEvents[eventsIndex].typeOfEvent,eventAndStateStr);
-        if (eventsIndex < 100 - 1) {
-            eventsIndex++;
-        } else {
-            eventsIndex = 0;
-        }
-
-        uartUsb.write(eventAndStateStr , strlen(eventAndStateStr));
-        uartUsb.write("\r\n", 2);
-    }
-}
-
 float analogReadingScaledWithTheLM35Formula(float analogReading)
 {
     return analogReading * 330.0;
